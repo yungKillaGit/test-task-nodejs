@@ -14,7 +14,7 @@ const config = require('../db/config.json').development;
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '5000');
 app.set('port', port);
 
 /**
@@ -89,12 +89,12 @@ async function onListening() {
     ? `pipe ${addr}`
     : `port ${addr.port}`;
 
-  const sequelize = new Sequelize('postgres://postgres:1@localhost:5432/template1');
+  const sequelize = new Sequelize(`postgres://${config.username}:${config.password}@${config.host}:${config.port}/template1`);
   sequelize.query('SELECT datname FROM pg_database')
     .then(async (result) => {
       const allDatabases = result[0].map((item) => item.datname);
       if (!allDatabases.includes(config.database)) {
-        await sequelize.query('CREATE DATABASE test_task')
+        await sequelize.query(`CREATE DATABASE ${config.database}`)
           .then(() => {
             console.log('db was created');
           })

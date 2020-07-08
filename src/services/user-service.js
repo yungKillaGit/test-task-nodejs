@@ -48,14 +48,14 @@ const userService = (User, cryptService, jwtService) => ({
           throw incorrectPasswordError;
         }
       });
+    if (newPassword.length <= 7) {
+      errors.push({ type: 'required-length', message: '8 or more characters' });
+    }
     if (!(/^(?=.*[a-zа-яё])(?=.*[A-ZА-ЯЁ]).+$/.test(newPassword))) {
-      errors.push({ message: 'Upper and lowercase letters' });
+      errors.push({ type: 'upper-lower', message: 'Upper and lowercase letters' });
     }
     if (!(/\d/.test(newPassword))) {
-      errors.push({ message: 'At least one number' });
-    }
-    if (newPassword.length <= 7) {
-      errors.push({ message: '8 or more characters' });
+      errors.push({ type: 'required-number', message: 'At least one number' });
     }
     return errors;
   },
