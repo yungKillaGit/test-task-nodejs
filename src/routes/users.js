@@ -47,7 +47,7 @@ const users = (userService, cryptService) => ({
     userService.validatePassword(req.userId, currentPassword, newPassword)
       .then(async (validationErrors) => {
         if (validationErrors.length !== 0) {
-          res.status(422).json({ errors: validationErrors });
+          return res.status(422).json({ errors: validationErrors });
         }
         const hashedPassword = await cryptService.crypt(newPassword);
         userService.updateById(req.userId, { passwordHash: hashedPassword })
